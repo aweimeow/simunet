@@ -6,7 +6,7 @@ class cmd:
     def __init__(self, cmd):
         self.cmd = cmd
 
-    def exec(self):
+    def safeexec(self):
         p = Popen(cmd, stdout=PIPE, stderr=PIPE)
         self.stdout, self.stderr = p.communicate()
 
