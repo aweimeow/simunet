@@ -55,8 +55,8 @@ class Host:
             logmsg = "Can't create Container %s: %s" % (self.name, p.stderr)
             logger.warn(logmsg)
         else:
-            logger.info('%s Created: %s' % (self.name, self.container_id))
             self.container_id = p.stdout.strip()
+            logger.info('%s Created: %s' % (self.name, self.container_id))
             self.status = 'create'
 
     def start(self):
@@ -69,7 +69,6 @@ class Host:
         p = Cmd('safe', cmd)
         self.status = 'start'
 
-        return p.stdout.strip()
 
     def stop(self):
         """ Stop the container """
@@ -81,4 +80,3 @@ class Host:
         p = Cmd('safe', cmd)
         self.status = 'stop'
 
-        return p.stdout.strip()
