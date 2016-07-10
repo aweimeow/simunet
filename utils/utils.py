@@ -1,4 +1,9 @@
 #! /usr/bin/python
+
+import os
+import logging
+import coloredlogs
+
 from subprocess import Popen, PIPE
 
 
@@ -17,4 +22,31 @@ class Cmd:
     def shellexec(self):
         p = Popen(self.cmd, stdout=PIPE, stderr=PIPE, shell=True)
         self.stdout, self.stderr = p.communicate()
+
+class Logger:
+    def __init__(self, module_name, level):
+        os.environ['COLOREDLOGS_LOG_FORMAT'] = (
+            '%(asctime)s %(name)s %(levelname)s %(message)s'
+            )
+        os.environ['COLOREDLOGS_LEVEL_STYLES'] = (
+            'info=white; verbos=white; debug=green;'
+            'warning=yellow;error=red;critical=red,bold;'
+            )
+        self.logger = logging.getLogger(module_name)
+        coloredlogs.install(level=level)
+
+    def debug(self, msg):
+        self.logger.debug(msg)
+
+    def info(self, msg):
+        self.logger.info(msg)
+
+    def warn(self, msg):
+        self.logger.warn(msg)
+
+    def error(self, msg):
+        self.logger.error(msg)
+
+    def critical(self, msg):
+        self.logger.critical(msg)
 
