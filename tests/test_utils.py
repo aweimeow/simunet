@@ -15,3 +15,14 @@ class TestCmdClass:
         rand_name = hex(hash(random() * random()))
         cmd = Cmd('safe', 'cat %s' % rand_name)
         assert cmd.stderr == 'cat: %s: No such file or directory\n' % rand_name
+
+    def test_shellexec_stdout(self):
+        cmd = Cmd('shell', 'echo 1\n2\n3\n | grep 1')
+        assert cmd.stdout == '1\n'
+
+    def test_shellexec_stderr(self):
+        cmd = Cmd('shell', 'echo 1 | grep')
+        err = ("Usage: grep [OPTION]... PATTERN [FILE]...\n"
+               "Try 'grep --help' for more information.\n"
+               "sh: echo: I/O error\n")
+        assert cmd.stderr == err
