@@ -9,8 +9,7 @@ from utils.utils import Cmd
 
 @pytest.fixture(scope="module")
 def host():
-    return Host('ubuntu:14.04', 1, 'h1',
-                '10.0.0.1', '00:AA:BB:CC:DD:EE')
+    return Host(1, 'h1', '10.0.0.1', mac='00:AA:BB:CC:DD:EE')
 
 @pytest.mark.usefixtures('host')
 class TestHostClass:
