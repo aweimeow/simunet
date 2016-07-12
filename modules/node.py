@@ -73,10 +73,15 @@ class Host:
             logger.error('%s has been started.' % self.name)
             return
 
+        # Send start command
         cmd = "docker start {}".format(self.container_id)
         p = Cmd('safe', cmd)
         self.status = 'start'
 
+        # get docker's pid
+        cmd = "docker inspect --format '{{.State.Pid}}' %s" % self.name
+        p = Cmd('safe', cmd)
+        self.pid = p.stdout.strip()
 
     def stop(self):
         """ Stop the container """
