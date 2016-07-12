@@ -14,24 +14,19 @@ class Host:
     A docker based container, use to simulate network host
     """
 
-    def __init__(self, name, ip, mac=None, os='ubuntu:14.04'):
+    def __init__(self, name, os='ubuntu:14.04'):
         """default value:
         name: h1 (str)
-        ip: 10.0.0.1/24 (str)
         os: ubuntu:14.04 (str)
-        mac: AA:BB:CC:DD:EE:FF (str)
         """
 
         self.os = os
         self.name = name
-        self.ip = ip
-        self.mac = mac
+        self.intf = {}
         self.gateway = None
         self.status = None
         self.create()
 
-    def set_intf(self, intf):
-        self.intf = intf
 
     def set_gateway(self, gateway):
         self.gateway = gateway
@@ -39,18 +34,14 @@ class Host:
     def network_config(self):
         """ Configuration for container's IP, mac and gateway """
 
-        cmd = ("docker exec %s ifconfig %s-eth0 %s").format(
-               self.name, self.name, self.ip)
-        Cmd('safe', cmd)
-
-        if self.mac:
-           cmd = ("docker exec %s ifconfig %s-eth0 hw ether %s").format(
-                   self.name, self.name, self.ip, self.mac)
-
-        if self.gateway:
-            cmd = ("docker exec %s route add default gw %s").format(
-                   self.name, self.gateway)
+        for name, intf in self.intf.iteritems():
+            cmd = ("docker exec {} ifconfig {} {}").format(
+                   self.name, name, intf.ip)
             Cmd('safe', cmd)
+
+            if intf.mac:
+               cmd = ("docker exec {} ifconfig {} hw ether {}").format(
+                       self.name, name, intf.mac)
 
     def create(self):
         """ Create Container """
@@ -115,7 +106,7 @@ class Switch:
 
     def __init__(self, name):
         
-        self.intf = []
+        self.intf = {}
 
         # Name Check for command injection
         if " " in name or ";" in name:
