@@ -59,7 +59,11 @@ class Host(object):
         """ Start the container """
 
         if self.status == 'start':
-            logger.error('%s has been started.' % self.name)
+            logger.warn('%s has been started.' % self.name)
+            return
+
+        if self.status == 'destroy':
+            logger.error('%s has been destroyed.' % self.name)
             return
 
         # Send start command
@@ -126,13 +130,12 @@ class Switch(object):
         p = Cmd('safe', cmd)
 
         if p.stderr:
-            logger.error
+            logger.error(p.stderr)
 
-    def set_intf(self, intf):
-        if type(intf) is Intf:
-            if not intf in self.intf:
-                self.intf.append(intf)
-            else:
-                logger.warn('%s has already append to %s.' % (intf, self.name))
-        else:
-            logger.error('Can\'t append %s to switch %s. % (intf, self.name)')
+    def network_config(self):
+        for name, intf in self.intf.iteritems():
+            p = Cmd('safe', 'ifconfig %s up' % intf.name)
+
+            if p.stderr:
+                logger.error('%s config error: %s' % self.name, p.stderr)
+            
