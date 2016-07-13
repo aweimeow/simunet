@@ -1,15 +1,13 @@
 #! /usr/bin/python
 # -*- encoding: utf-8 -*-
 
-import logging
-
-from modules.interface import Intf
+from modules.intf import Intf
 from utils.utils import Cmd, Logger
 
 logger = Logger('node.py', 'WARNING')
 
 
-class Host:
+class Host(object):
     """
     A docker based container, use to simulate network host
     """
@@ -26,7 +24,7 @@ class Host:
         self.gateway = None
         self.status = None
         self.create()
-
+        self.start()
 
     def set_gateway(self, gateway):
         self.gateway = gateway
@@ -72,7 +70,7 @@ class Host:
         # get docker's pid
         cmd = "docker inspect --format '{{.State.Pid}}' %s" % self.name
         p = Cmd('safe', cmd)
-        self.pid = p.stdout.strip()
+        self.pid = int(p.stdout.strip().replace("'", ""))
 
     def stop(self):
         """ Stop the container """
@@ -101,7 +99,7 @@ class Host:
         self.status = 'destroy'
 
 
-class Switch:
+class Switch(object):
     """ ovs simulated switch """
 
     def __init__(self, name):
