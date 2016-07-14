@@ -18,16 +18,23 @@ class Host(object):
         os: ubuntu:14.04 (str)
         """
 
-        self.os = os
-        self.name = name
+        self.__os = os
+        self.__name = name
+        self.__status = None
         self.intf = {}
-        self.gateway = None
-        self.status = None
         self.create()
         self.start()
 
-    def set_gateway(self, gateway):
-        self.gateway = gateway
+    # os, name, status is readonly private variable
+    # it is not recommended to modify it after initialize
+    def os(self):
+        return self.__os
+
+    def name(self):
+        return self.__name
+
+    def status(self):
+        return self.__status
 
     def network_config(self):
         """ Configuration for container's IP, mac and gateway """
