@@ -60,23 +60,23 @@ class Host(object):
         else:
             self.container_id = p.stdout.strip()
             logger.info('%s Created: %s' % (self.name, self.container_id))
-            self.status = 'create'
+            self.__status = 'create'
 
     def start(self):
         """ Start the container """
 
-        if self.status == 'start':
+        if self.__status == 'start':
             logger.warn('%s has been started.' % self.name)
             return
 
-        if self.status == 'destroy':
+        if self.__status == 'destroy':
             logger.error('%s has been destroyed.' % self.name)
             return
 
         # Send start command
         cmd = "docker start {}".format(self.container_id)
         p = Cmd('safe', cmd)
-        self.status = 'start'
+        self.__status = 'start'
 
         # get docker's pid
         cmd = "docker inspect --format '{{.State.Pid}}' %s" % self.name
@@ -86,28 +86,28 @@ class Host(object):
     def stop(self):
         """ Stop the container """
 
-        if self.status == 'stop':
+        if self.__status == 'stop':
             logger.error('%s has been stoped.' % self.name)
             return
 
         cmd = "docker stop {}".format(self.container_id)
         p = Cmd('safe', cmd)
-        self.status = 'stop'
+        self.__status = 'stop'
 
     def destroy(self):
         """ Remove this Container """
 
-        if self.status == 'destroy':
+        if self.__status == 'destroy':
             logger.error('%s has been destroyed.' % self.name)
             return
 
-        if self.status == 'start':
+        if self.__status == 'start':
             logger.warn('%s can\'t destroy: Stop container first' % self.name)
             return
 
         cmd = "docker rm {}".format(self.container_id)
         p = Cmd('safe', cmd)
-        self.status = 'destroy'
+        self.__status = 'destroy'
 
 
 class Switch(object):
