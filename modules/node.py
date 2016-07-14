@@ -27,12 +27,15 @@ class Host(object):
 
     # os, name, status is readonly private variable
     # it is not recommended to modify it after initialize
+    @property
     def os(self):
         return self.__os
 
+    @property
     def name(self):
         return self.__name
 
+    @property
     def status(self):
         return self.__status
 
