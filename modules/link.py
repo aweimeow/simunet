@@ -69,3 +69,30 @@ class Link(object):
         if p.stderr.strip() != '':
             logger.error('veth append to switch error: %s' % p.stderr)
 
+class TCLink(Link):
+    def __init__(self, obj1, obj2, intf1_name=None, intf2_name=None, 
+                    bw=None, delay=None, loss=None):
+        super(TCLink, self).__init__(obj1, obj2, intf1_name, intf2_name)
+        self.bandwidth = bw
+        self.delay = delay
+        self.loss = loss
+
+    def tc_active(self):
+        cmds = []
+        cmds.append('tc qdisc add dev %s root handle 5:0 htb default 1')
+        if self.bandwidth:
+            cmds.appends('tc class add dev %s parent 5:0 ' + 
+                'classid 5:1 htb rate %sMbit burst 15k' % self.bandwidth)
+        if self.delay or self.loss:
+            cmds.append('tc qdisc add dev %s parent 5:1 handle 10: ' +
+                'netem delay %sms' % self.delay if self.delay else '' +
+                'loss %s' % self.loss if self.loss else '')
+
+        for cmd in cmds:
+            p = Cmd('safe', cmd % self.intf1_name)
+            if p.stderr:
+                logger.error('tc execute error: %s' % p.stderr)
+            p = Cmd('safe', cmd % self.intf2_name)
+            if p.stderr:
+                logger.error('tc execute error: %s' % p.stderr)
+
