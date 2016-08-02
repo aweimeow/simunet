@@ -81,7 +81,7 @@ class TCLink(Link):
         cmds = []
         cmds.append('tc qdisc add dev %s root handle 5:0 htb default 1')
         if self.bandwidth:
-            cmds.appends('tc class add dev %s parent 5:0 ' + 
+            cmds.append('tc class add dev %s parent 5:0 ' + 
                 'classid 5:1 htb rate %sMbit burst 15k' % self.bandwidth)
         if self.delay or self.loss:
             cmds.append('tc qdisc add dev %s parent 5:1 handle 10: ' +
@@ -89,10 +89,12 @@ class TCLink(Link):
                 'loss %s' % self.loss if self.loss else '')
 
         for cmd in cmds:
-            p = Cmd('safe', cmd % self.intf1_name)
-            if p.stderr:
-                logger.error('tc execute error: %s' % p.stderr)
-            p = Cmd('safe', cmd % self.intf2_name)
-            if p.stderr:
-                logger.error('tc execute error: %s' % p.stderr)
+            if type(self.obj1) is Switch:
+                p = Cmd('safe', cmd % self.intf1.name)
+                if p.stderr:
+                    logger.error('tc execute error: %s' % p.stderr)
+            if type(self.obj2) is Switch:
+                p = Cmd('safe', cmd % self.intf2.name)
+                if p.stderr:
+                    logger.error('tc execute error: %s' % p.stderr)
 
