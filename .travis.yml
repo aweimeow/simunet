@@ -11,17 +11,9 @@ services:
 
 before_install:
     - docker pull ubuntu:14.04
-    - wget http://openvswitch.org/releases/openvswitch-2.3.1.tar.gz
-    - tar zxvf openvswitch-2.3.1.tar.gz && cd openvswitch-2.3.1
-    - ./boot.sh
-    - ./configure --with-linux=/lib/modules/`uname -r`/build
-    - make -j && sudo make install
-    - sudo make modules_install
-    - sudo modprobe gre
-    - sudo modprobe openvswitch
-    - sudo modprobe libcrc32c
 
 install: 
+    - sudo apt-get install openvswitch-switch
     - pip install pytest==2.9.2
     - pip install pytest-cov==2.3.1
     - pip install flake8
