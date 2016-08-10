@@ -1,11 +1,17 @@
-sudo: false
+sudo: true
 language: python
 python:
     - "2.7"
 env: 
-    - TEST_SUITE='coverage run py.test'
+    - TEST_SUITE='py.test --cov=simunet tests/'
     - TEST_SUITE='flake8 --exclude=venv'
-install: "pip install -r requirements.txt"
+services:
+    - docker
+install: 
+    - pip install pytest==2.9.2
+    - pip install pytest-cov==2.3.1
+    - pip install flake8
+    - pip install -r requirements.txt
 script: 
     - echo $TEST_SUITE
     - $TEST_SUITE
