@@ -1,0 +1,14 @@
+sudo: false
+language: python
+python:
+    - "2.7"
+env: 
+    - TEST_SUITE='coverage run py.test'
+    - TEST_SUITE='flake8 --exclude=venv'
+install: "pip install -r requirements.txt"
+script: 
+    - echo $TEST_SUITE
+    - $TEST_SUITE
+affter_success: 
+    - coverage report
+    - coveralls
