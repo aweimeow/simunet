@@ -3,9 +3,9 @@
 import re
 import pytest
 
-from modules.node import Host, Switch
-from modules.link import Link, TCLink
-from utils.utils import Cmd
+from simunet.modules.node import Host, Switch
+from simunet.modules.link import Link, TCLink
+from simunet.utils.utils import Cmd
 
 
 @pytest.fixture(scope="module")

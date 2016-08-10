@@ -3,8 +3,8 @@
 import re
 import pytest
 
-from modules.node import Host, Switch
-from utils.utils import Cmd
+from simunet.modules.node import Host, Switch
+from simunet.utils.utils import Cmd
 
 
 @pytest.fixture(scope="module")

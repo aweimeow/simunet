@@ -1,8 +1,8 @@
 #! /usr/bin/python
 # -*- encoding: utf-8 -*-
 
-from modules.intf import Intf
-from utils.utils import Cmd, Logger
+from simunet.modules.intf import Intf
+from simunet.utils.utils import Cmd, Logger
 
 logger = Logger('node.py', 'WARNING')
 

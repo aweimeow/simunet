@@ -3,7 +3,7 @@
 import pytest
 from random import random
 
-from utils.utils import Cmd
+from simunet.utils.utils import Cmd
 
 
 class TestCmdClass:

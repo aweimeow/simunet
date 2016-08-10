@@ -1,8 +1,8 @@
 #! /usr/bin/python
 
-from utils.utils import Cmd, Logger
-from modules.node import Host, Switch
-from modules.intf import Intf
+from simunet.utils.utils import Cmd, Logger
+from simunet.modules.node import Host, Switch
+from simunet.modules.intf import Intf
 
 
 logger = Logger('link.py', 'WARNING')
